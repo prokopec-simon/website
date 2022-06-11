@@ -29,6 +29,9 @@ import MapService from "@/services/MapsService";
 import TournamentsService from "@/services/TournamentsService";
 import LocaleService from "@/services/LocaleService";
 import { OauthState } from "@/store/oauth/types";
+import PermissionsService from "@/services/rolesAndPermissions/PermissionService";
+import RoleService from "@/services/rolesAndPermissions/RoleService";
+import UserService from "@/services/rolesAndPermissions/UserService";
 
 Vue.use(Vuex);
 
@@ -45,6 +48,9 @@ const services = {
   mapsService: new MapService(),
   tournamentsService: new TournamentsService(),
   localeService: new LocaleService(),
+  permissionService: new PermissionsService(),
+  roleService: new RoleService(),
+  userService: new UserService(),
 };
 
 const mod = {
@@ -128,11 +134,19 @@ const mod = {
     localeService() {
       return services.localeService;
     },
+    permissionService() {
+      return services.permissionService;
+    },
+    roleService() {
+      return services.roleService;
+    },
+    userService() {
+      return services.userService;
+    },
   },
 } as const;
 
-const { store, rootActionContext, moduleActionContext } =
-  createDirectStore(mod);
+const { store, rootActionContext, moduleActionContext } = createDirectStore(mod);
 
 export default store;
 

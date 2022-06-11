@@ -3,6 +3,7 @@ import { RootState } from "../typings";
 import { ActionContext } from "vuex";
 import playerManagementModule from "./playerManagement/index";
 import mapsManagementModule from "./maps/index";
+import rolesAndPermissionsModule from "./rolesAndPermissions/index";
 
 import {
   AdminState,
@@ -378,7 +379,8 @@ const mod = {
 
   modules: {
     playerManagement: playerManagementModule,
-    mapsManagement: mapsManagementModule
+    mapsManagement: mapsManagementModule,
+    rolesAndPermissionsManagement: rolesAndPermissionsModule,
   },
 } as const;
 
