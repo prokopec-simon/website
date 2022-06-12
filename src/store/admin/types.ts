@@ -22,10 +22,6 @@ export type AdminPlayerManagementState = {
   portraitDefinitionGroups: PortraitDefinitionGroup[];
 };
 
-export type AdminRolesAndPermissionsState = {
-  placeholder: string;
-};
-
 export interface ChangePortraitsCommand {
   battleTags: string[];
   portraitIds: number[];
