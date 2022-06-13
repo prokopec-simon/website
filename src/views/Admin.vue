@@ -2,7 +2,7 @@
   <v-container fluid v-show="isAdmin" style="height: 100%">
     <div class="admin-page-wrapper">
       <admin-navigation
-        :items="navItems"
+        :items="getNavItemsWithPermissions()"
         v-on:itemSelected="navItemSelected"
       ></admin-navigation>
       <v-card tile>
@@ -48,114 +48,160 @@ import AdminMaps from "@/components/admin/AdminMaps.vue";
   },
 })
 export default class Admin extends Vue {
+  getNavItemsWithPermissions(): NavigationItem[] {
+    let navItemsWithPermissions = this.navItems.filter(x => x.visible != false);
+    navItemsWithPermissions.forEach(x => x.items = x.items?.filter(y => y.visible != false));
+    return navItemsWithPermissions.filter(x => x.items != undefined && x.items.length > 0);
+  }
+
   navItems: Array<NavigationItem> = [
     {
       title: "Moderation",
       icon: "mdi-account-group",
+      visible: this.hasPermission("view-moderation-panel"),
       items: [
         {
           key: "banned_players",
           title: "Banned Players",
           icon: "mdi-account-remove",
           component: "admin-banned-players",
+          visible: this.hasPermission("view-banned-players-panel"),
         },
         {
           key: "alts",
           title: "Smurf Checker",
           icon: "mdi-account-question",
           component: "admin-alts",
+          visible: this.hasPermission("view-smurf-checker-panel"),
         },
         {
           key: "mute",
           title: "Global Mute",
           icon: "mdi-chat-remove",
           component: "admin-global-mute",
+          visible: this.hasPermission("view-global-mute-panel"),
         },
       ],
     },
     {
       title: "Player Settings",
       icon: "mdi-cog",
+      visible: this.hasPermission("view-player-settings-panel"),
       items: [
         {
           key: "proxy_settings",
           title: "Proxy Settings",
           icon: "mdi-account-network",
           component: "admin-proxies",
+          visible: this.hasPermission("view-proxies-panel"),
         },
       ],
     },
     {
       title: "Launcher",
       icon: "mdi-rocket",
+      visible: this.hasPermission("view-launcher-panel"),
       items: [
         {
           key: "news",
           title: "News for Launcher",
           icon: "mdi-rss",
           component: "admin-news-for-launcher",
+          visible: this.hasPermission("view-launcher-news-panel"),
         },
       ],
     },
     {
       title: "In-Game Settings",
       icon: "mdi-monitor-dashboard",
+      visible: this.hasPermission("view-ingame-settings-panel"),
       items: [
         {
           key: "tips",
           icon: "mdi-tooltip-text-outline",
           title: "Loading screen tips",
           component: "admin-loading-screen-tips",
+          visible: this.hasPermission("view-loading-tips-panel"),
         },
       ],
     },
     {
       title: "Data Science",
       icon: "mdi-chart-line",
+      visible: this.hasPermission("view-data-science-panel"),
       items: [
         {
           key: "queue",
           title: "Live Queue Data",
           icon: "mdi-table",
           component: "admin-queue-data",
+          visible: this.hasPermission("view-queues-panel"),
         },
       ],
     },
     {
       title: "Rewards",
       icon: "mdi-gift",
+      visible: this.hasPermission("view-rewards-panel"),
       items: [
         {
           key: "portraits",
           title: "Assign Portraits",
           icon: "mdi-account-box-outline",
           component: "admin-assign-portraits",
+          visible: this.hasPermission("view-assign-portraits-panel"),
         },
         {
           key: "manage-portraits",
           title: "Manage Portraits",
           icon: "mdi-briefcase",
           component: "admin-manage-portraits",
-        }
+          visible: this.hasPermission("view-manage-portraits-panel"),
+        },
       ],
     },
     {
       title: "Maps",
       icon: "mdi-map-search",
+      visible: this.hasPermission("view-maps-panel"),
       items: [
         {
           key: "maps",
           title: "Manage Maps",
           icon: "mdi-map-plus",
           component: "admin-maps",
+          visible: this.hasPermission("view-maps-panel"),
+        },
+      ],
+    },
+    {
+      title: "Permissions",
+      icon: "mdi-key",
+      visible: this.isSuperAdmin(),
+      items: [
+        {
+          key: "roles",
+          title: "Manage Roles",
+          icon: "mdi-tag-faces",
+          component: "super-admin-roles-and-permissions",
         },
       ],
     },
   ];
   selectedNavItem = {};
 
-  get isAdmin(): boolean {
+  isAdmin(): boolean {
     return this.$store.direct.state.oauth.isAdmin;
+  }
+
+  isSuperAdmin(): boolean {
+    return this.$store.direct.state.oauth.isSuperAdmin;
+  }
+
+  hasPermission(permission: string): boolean { // need to revise computed properties
+    if (this.isSuperAdmin() || this.isAdmin()) return true;
+
+    return this.$store.direct.state.oauth.permissions.includes(permission);
   }
 
   navItemSelected(item: NavigationItem): void {

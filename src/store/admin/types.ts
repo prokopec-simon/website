@@ -62,6 +62,7 @@ export interface NavigationItem {
   icon?: string;
   component?: string;
   items?: Array<NavigationItem>;
+  visible?: boolean;
 }
 
 export interface QueueData {

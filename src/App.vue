@@ -245,10 +245,8 @@ export default class App extends Vue {
    * @return boolean
    * @param item
    */
-  public isNavItemVisible(item: any): boolean {
-    if (item.title == "admin" && !this.isAdmin) {
-      return false;
-    }
+  public isNavItemVisible(item: ItemType): boolean {
+    if (item.title == "admin" && !this.canSeeAdminPanel) return false;
     return true;
   }
 
@@ -270,8 +268,10 @@ export default class App extends Vue {
     return this.$store.direct.state.oauth.blizzardVerifiedBtag;
   }
 
-  get isAdmin(): boolean {
-    return this.$store.direct.state.oauth.isAdmin;
+  get canSeeAdminPanel(): boolean {
+    console.log("change this"); // console log to fail build in case this is not fixed after dev
+    return true;
+    //return this.$store.direct.state.oauth.permissions.includes("view-admin-panel");
   }
 
   get isDarkTheme(): boolean {
