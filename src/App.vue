@@ -223,13 +223,7 @@ export default class App extends Vue {
     }
   }
 
-  async saveLoginRegion({
-    region,
-    done,
-  }: {
-    region: BnetOAuthRegion;
-    done: () => void;
-  }) {
+  async saveLoginRegion({ region, done }: { region: BnetOAuthRegion; done: () => void }) {
     await this.$store.direct.dispatch.oauth.saveLoginRegion(region);
     done();
   }

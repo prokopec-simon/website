@@ -2,7 +2,7 @@
   <v-container fluid v-show="isAdmin" style="height: 100%">
     <div class="admin-page-wrapper">
       <admin-navigation
-        :items="getNavItemsWithPermissions()"
+        :items="navItemsAfterPermissions"
         v-on:itemSelected="navItemSelected"
       ></admin-navigation>
       <v-card tile>
@@ -20,6 +20,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { NavigationItem } from "@/store/admin/types";
 
+import AdminHome from "@/components/admin/AdminHome.vue";
 import AdminNavigation from "@/components/admin/AdminNavigation.vue";
 import AdminBannedPlayers from "@/components/admin/AdminBannedPlayers.vue";
 import AdminLoadingScreenTips from "@/components/admin/AdminLoadingScreenTips.vue";
@@ -45,16 +46,26 @@ import AdminMaps from "@/components/admin/AdminMaps.vue";
     AdminAssignPortraits,
     AdminManagePortraits,
     AdminMaps,
+    AdminHome,
   },
 })
 export default class Admin extends Vue {
+  navItemsAfterPermissions = [] as NavigationItem[];
+
   getNavItemsWithPermissions(): NavigationItem[] {
     let navItemsWithPermissions = this.navItems.filter(x => x.visible != false);
     navItemsWithPermissions.forEach(x => x.items = x.items?.filter(y => y.visible != false));
+    console.log("in a loop?");
     return navItemsWithPermissions.filter(x => x.items != undefined && x.items.length > 0);
   }
 
   navItems: Array<NavigationItem> = [
+    {
+      title: "Home",
+      icon: "mdi-home-outline",
+      visible: true,
+      component: "admin-home",
+    },
     {
       title: "Moderation",
       icon: "mdi-account-group",
@@ -222,7 +233,8 @@ export default class Admin extends Vue {
   }
 
   mounted(): void {
-    this.navItemSelected(this.getFirstItem(this.navItems));
+    this.navItemsAfterPermissions = this.getNavItemsWithPermissions();
+    this.navItemSelected(this.getFirstItem(this.navItemsAfterPermissions));
   }
 }
 </script>
