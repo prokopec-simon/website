@@ -263,9 +263,9 @@ export default class App extends Vue {
   }
 
   get canSeeAdminPanel(): boolean {
-    console.log("change this"); // console log to fail build in case this is not fixed after dev
-    return true;
-    //return this.$store.direct.state.oauth.permissions.includes("view-admin-panel");
+    const auth = this.$store.direct.state.oauth;
+    if (auth.isAdmin || auth.isSuperAdmin) return true;
+    return auth.permissions.includes("view-admin-panel");
   }
 
   get isDarkTheme(): boolean {
@@ -360,8 +360,7 @@ export default class App extends Vue {
 
 .level {
   color: white;
-  text-shadow: 0.5px 0.5px 0.5px black, 0.5px -0.5px 0.5px black,
-    -0.5px 0.5px 0.5px black, -0.5px -0.5px 0.5px black;
+  text-shadow: 0.5px 0.5px 0.5px black, 0.5px -0.5px 0.5px black, -0.5px 0.5px 0.5px black, -0.5px -0.5px 0.5px black;
 }
 
 .profile {

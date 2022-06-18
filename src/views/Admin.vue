@@ -55,7 +55,6 @@ export default class Admin extends Vue {
   getNavItemsWithPermissions(): NavigationItem[] {
     let navItemsWithPermissions = this.navItems.filter(x => x.visible != false);
     navItemsWithPermissions.forEach(x => x.items = x.items?.filter(y => y.visible != false));
-    console.log("in a loop?");
     return navItemsWithPermissions.filter(x => x.items != undefined && x.items.length > 0);
   }
 
@@ -191,8 +190,8 @@ export default class Admin extends Vue {
       visible: this.isSuperAdmin(),
       items: [
         {
-          key: "roles",
-          title: "Manage Roles",
+          key: "roles-and-permissions",
+          title: "Manage Roles and Permissions",
           icon: "mdi-tag-faces",
           component: "super-admin-roles-and-permissions",
         },
