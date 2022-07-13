@@ -167,7 +167,6 @@ export enum EAvatarCategory {
   UNDEAD = 8,
   TOTAL = 16,
   SPECIAL = 32,
-  STARTER = 64,
 }
 
 export enum EColors {
