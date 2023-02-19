@@ -49,23 +49,17 @@
             </v-card-subtitle>
           </v-card-title>
           <div v-if="isCompleteGame">
-            <match-detail-hero-row v-for="(player, index) in scoresOfWinners" v-bind:key="index" :heroes-of-winner="
-              !!scoresOfWinners[index] ? scoresOfWinners[index]?.heroes : []
-            " :heroes-of-looser="
-  !!scoresOfLoosers[index] ? scoresOfLoosers[index]?.heroes : []
-" :scores-of-winner="
-  !!scoresOfWinners[index] ? scoresOfWinners[index]?.heroScore : []
-" :scores-of-looser="
-  !!scoresOfLoosers[index] ? scoresOfLoosers[index]?.heroScore : []
-" />
+            <match-detail-hero-row v-for="(player, index) in scoresOfWinners" v-bind:key="index"
+              :heroes-of-winner="!!scoresOfWinners[index] ? scoresOfWinners[index]?.heroes : []"
+              :heroes-of-looser="!!scoresOfLoosers[index] ? scoresOfLoosers[index]?.heroes : []"
+              :scores-of-winner="!!scoresOfWinners[index] ? scoresOfWinners[index]?.heroScore : []"
+              :scores-of-looser="!!scoresOfLoosers[index] ? scoresOfLoosers[index]?.heroScore : []" />
           </div>
           <match-detail-hero-row v-if="matchIsFFA() && isCompleteGame" :not-color-winner="true"
             :heroes-of-winner="!!ffaLooser2?.heroes ? ffaLooser2?.heroes : []"
-            :heroes-of-looser="!!ffaLooser3?.heroes ? ffaLooser3?.heroes : []" :scores-of-winner="
-              !!ffaLooser2?.heroScore ? ffaLooser2?.heroScore : []
-            " :scores-of-looser="
-  !!ffaLooser3?.heroScore ? ffaLooser3?.heroScore : []
-" />
+            :heroes-of-looser="!!ffaLooser3?.heroes ? ffaLooser3?.heroes : []"
+            :scores-of-winner="!!ffaLooser2?.heroScore ? ffaLooser2?.heroScore : []"
+            :scores-of-looser="!!ffaLooser3?.heroScore ? ffaLooser3?.heroScore : []" />
           <v-row v-if="!isCompleteGame" class="justify-center">
             <v-card-subtitle>
               {{ $t(`views_matchdetail.incompletedata`) }}
@@ -73,26 +67,16 @@
           </v-row>
           <v-row v-if="isCompleteGame && !matchIsFFA()" class="justify-center">
             <v-col cols="5" class="mr-7">
-              <player-performance-on-match class="mt-4" :unit-score="
-                scoresOfWinners.map((h) => (!!h ? h.unitScore : []))
-              " :resource-scoure="
-  scoresOfWinners.map((h) => (!!h ? h.resourceScore : []))
-" :unit-score-opponent="
-  scoresOfLoosers.map((h) => (!!h ? h.unitScore : []))
-" :resource-scoure-opponent="
-  scoresOfLoosers.map((h) => (!!h ? h.resourceScore : []))
-" :left="true" />
+              <player-performance-on-match class="mt-4" :unit-score="scoresOfWinners.map((h) => (!!h ? h.unitScore : []))"
+                :resource-scoure="scoresOfWinners.map((h) => (!!h ? h.resourceScore : []))"
+                :unit-score-opponent="scoresOfLoosers.map((h) => (!!h ? h.unitScore : []))"
+                :resource-scoure-opponent="scoresOfLoosers.map((h) => (!!h ? h.resourceScore : []))" :left="true" />
             </v-col>
             <v-col cols="5" class="ml-7">
-              <player-performance-on-match :unit-score="
-                scoresOfLoosers.map((h) => (!!h ? h.unitScore : []))
-              " :resource-scoure="
-  scoresOfLoosers.map((h) => (!!h ? h.resourceScore : []))
-" :unit-score-opponent="
-  scoresOfWinners.map((h) => (!!h ? h.unitScore : []))
-" :resource-scoure-opponent="
-  scoresOfWinners.map((h) => (!!h ? h.resourceScore : []))
-" />
+              <player-performance-on-match :unit-score="scoresOfLoosers.map((h) => (!!h ? h.unitScore : []))"
+                :resource-scoure="scoresOfLoosers.map((h) => (!!h ? h.resourceScore : []))"
+                :unit-score-opponent="scoresOfWinners.map((h) => (!!h ? h.unitScore : []))"
+                :resource-scoure-opponent="scoresOfWinners.map((h) => (!!h ? h.resourceScore : []))" />
             </v-col>
           </v-row>
           <v-row class="mb-3" v-if="isCompleteGame && matchIsFFA()">
@@ -174,15 +158,7 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
   }
 
   get rowLabels() {
-    return [
-      "",
-      "Units killed",
-      "Units produced",
-      "Gold mined",
-      "Lumber harvested",
-      "Upkeep lost",
-      "Largest army",
-    ];
+    return ["", "Units killed", "Units produced", "Gold mined", "Lumber harvested", "Upkeep lost", "Largest army"];
   }
 
   get ffaPlayers() {
@@ -191,23 +167,15 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
 
   get matchDuration() {
     const format =
-      this.match.durationInSeconds <= 3600
-        ? this.$t("dateFormats.timeShort")
-        : this.$t("dateFormats.timeLong");
+      this.match.durationInSeconds <= 3600 ? this.$t("dateFormats.timeShort") : this.$t("dateFormats.timeLong");
     return moment
-      .utc(
-        moment
-          .duration(this.match.durationInSeconds, "seconds")
-          .asMilliseconds()
-      )
+      .utc(moment.duration(this.match.durationInSeconds, "seconds").asMilliseconds())
       .format(format.toString())
       .toString();
   }
 
   get playedDate() {
-    return moment(this.match.startTime).format(
-      this.$t("dateFormats.date").toString()
-    );
+    return moment(this.match.startTime).format(this.$t("dateFormats.date").toString());
   }
 
   get match() {
@@ -257,12 +225,9 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
   }
 
   matchIsFFA() {
-    const ffaModes = [
-      EGameMode.GM_FFA, EGameMode.GM_SC_FFA_4
-    ];
+    const ffaModes = [EGameMode.GM_FFA, EGameMode.GM_SC_FFA_4];
 
     return ffaModes.includes(this.$store.direct.state.matches.matchDetail.match.gameMode);
-
   }
 
   get isCompleteGame() {
@@ -270,21 +235,22 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
   }
 
   get playerScores() {
-    const playerScores = this.$store.direct.state.matches.matchDetail.playerScores;
-    const teams = this.$store.direct.state.matches.matchDetail.match.teams;
+    const {
+      playerScores,
+      match: { teams },
+    } = this.$store.direct.state.matches.matchDetail;
 
     if (this.matchIsFFA()) {
-
-      const mapped = playerScores.map((playerScore) => {
+      const ffaMappedPlayerScores = playerScores.map((playerScore) => {
         const battleTag = teams[playerScore.teamIndex].players[0].battleTag;
         return {
           ...playerScore,
-          battleTag
+          battleTag,
         };
-      })
+      });
 
-      this.$store.direct.dispatch.matches.setPlayerScores(mapped);
-      return mapped;
+      this.$store.direct.dispatch.matches.setPlayerScores(ffaMappedPlayerScores);
+      return ffaMappedPlayerScores ?? [];
     }
 
     return playerScores ?? [];
@@ -301,33 +267,23 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
   }
 
   get ffaWinner() {
-    return this.playerScores.find(
-      (s) => s.battleTag === this.match.teams[0].players[0].battleTag
-    );
+    return this.playerScores.find((s) => s.battleTag === this.match.teams[0].players[0].battleTag);
   }
 
   get ffaLoosers() {
-    return this.playerScores.filter(
-      (s) => s.battleTag !== this.match.teams[0].players[0].battleTag
-    );
+    return this.playerScores.filter((s) => s.battleTag !== this.match.teams[0].players[0].battleTag);
   }
 
   get ffaLooser1() {
-    return this.playerScores.find(
-      (s) => s.battleTag === this.match.teams[1].players[0].battleTag
-    );
+    return this.playerScores.find((s) => s.battleTag === this.match.teams[1].players[0].battleTag);
   }
 
   get ffaLooser2() {
-    return this.playerScores.find(
-      (s) => s.battleTag === this.match.teams[2].players[0].battleTag
-    );
+    return this.playerScores.find((s) => s.battleTag === this.match.teams[2].players[0].battleTag);
   }
 
   get ffaLooser3() {
-    return this.playerScores.find(
-      (s) => s.battleTag === this.match.teams[3].players[0].battleTag
-    );
+    return this.playerScores.find((s) => s.battleTag === this.match.teams[3].players[0].battleTag);
   }
 
   get loading() {
@@ -344,18 +300,14 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
         team.players.some(
           (player) =>
             player.battleTag.startsWith(s.battleTag) ||
-            s.battleTag
-              .toLowerCase()
-              .includes(player.battleTag.toLowerCase().split("#", 1)[0])
+            s.battleTag.toLowerCase().includes(player.battleTag.toLowerCase().split("#", 1)[0])
         )
       )
       .map((s) => {
         // Use the battleTag from the Player record
         // since it is sometimes incorrect on the PlayerScore record
         const matchedPlayer = team.players.find((p) =>
-          s.battleTag
-            .toLowerCase()
-            .includes(p.battleTag.toLowerCase().split("#", 1)[0])
+          s.battleTag.toLowerCase().includes(p.battleTag.toLowerCase().split("#", 1)[0])
         );
         return {
           ...s,
@@ -365,9 +317,7 @@ export default class MatchDetailView extends Mixins(MatchMixin) {
 
     const playerScoreDictionary = _keyBy(scores, "battleTag");
 
-    return team.players.map(
-      (player) => playerScoreDictionary[player.battleTag]
-    );
+    return team.players.map((player) => playerScoreDictionary[player.battleTag]);
   }
 }
 </script>
