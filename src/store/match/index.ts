@@ -1,4 +1,4 @@
-import { EGameMode } from "@/store/typings";
+import { EGameMode, Player, PlayerScore } from "@/store/typings";
 import { moduleActionContext } from "..";
 import { MatchState, MatchStatus, Mmr } from "./types";
 import { Match, MatchDetail, RootState } from "../typings";
@@ -20,10 +20,7 @@ const mod = {
     sort: "startTimeDescending",
   } as MatchState,
   actions: {
-    async loadMatches(
-      context: ActionContext<MatchState, RootState>,
-      page?: number
-    ) {
+    async loadMatches(context: ActionContext<MatchState, RootState>, page?: number) {
       const { commit, rootGetters, state, rootState } = moduleActionContext(context, mod);
 
       if (page != null && !isNaN(page)) {
@@ -54,11 +51,7 @@ const mod = {
       commit.SET_TOTAL_MATCHES(response.count);
       commit.SET_MATCHES(response.matches);
     },
-    async loadAllOngoingMatches(
-      context: ActionContext<MatchState, RootState>,
-      gameMode?: EGameMode,
-      map?: string
-    ) {
+    async loadAllOngoingMatches(context: ActionContext<MatchState, RootState>, gameMode?: EGameMode, map?: string) {
       const { commit, rootGetters, state, rootState } = moduleActionContext(context, mod);
 
       const response = await rootGetters.matchService.retrieveOnGoingMatches(
@@ -73,10 +66,7 @@ const mod = {
 
       commit.SET_ALL_ONGOING_MATCHES(response.matches);
     },
-    async loadMatchDetail(
-      context: ActionContext<MatchState, RootState>,
-      id: string
-    ) {
+    async loadMatchDetail(context: ActionContext<MatchState, RootState>, id: string) {
       const { commit, rootGetters } = moduleActionContext(context, mod);
 
       commit.SET_LOADING_MATCH_DETAIL(true);
@@ -85,19 +75,13 @@ const mod = {
       commit.SET_MATCH_DETAIL(response);
       commit.SET_LOADING_MATCH_DETAIL(false);
     },
-    async setStatus(
-      context: ActionContext<MatchState, RootState>,
-      matchStatus: MatchStatus
-    ) {
+    async setStatus(context: ActionContext<MatchState, RootState>, matchStatus: MatchStatus) {
       const { commit, dispatch } = moduleActionContext(context, mod);
       commit.SET_STATUS(matchStatus);
       commit.SET_PAGE(0);
       await dispatch.loadMatches(undefined);
     },
-    async setGameMode(
-      context: ActionContext<MatchState, RootState>,
-      gameMode: EGameMode
-    ) {
+    async setGameMode(context: ActionContext<MatchState, RootState>, gameMode: EGameMode) {
       const { commit, dispatch } = moduleActionContext(context, mod);
       commit.SET_GAME_MODE(gameMode);
       commit.SET_MAP("Overall");
@@ -110,23 +94,21 @@ const mod = {
       commit.SET_PAGE(0);
       await dispatch.loadMatches(undefined);
     },
-    async setMmr(
-      context: ActionContext<MatchState, RootState>,
-      mmr: Mmr
-    ) {
+    async setMmr(context: ActionContext<MatchState, RootState>, mmr: Mmr) {
       const { commit, dispatch } = moduleActionContext(context, mod);
       commit.SET_MMR(mmr);
       commit.SET_PAGE(0);
       await dispatch.loadMatches(undefined);
     },
-    async setSort(
-      context: ActionContext<MatchState, RootState>,
-      sort: string
-    ) {
+    async setSort(context: ActionContext<MatchState, RootState>, sort: string) {
       const { commit, dispatch } = moduleActionContext(context, mod);
       commit.SET_SORT(sort);
       commit.SET_PAGE(0);
       await dispatch.loadMatches(undefined);
+    },
+    async setPlayerScores(context: ActionContext<MatchState, RootState>, playerScores: PlayerScore[]) {
+      const { commit } = moduleActionContext(context, mod);
+      commit.SET_PLAYER_SCORES(playerScores);
     },
   },
   mutations: {
@@ -162,6 +144,9 @@ const mod = {
     },
     SET_SORT(state: MatchState, sort: string) {
       state.sort = sort;
+    },
+    SET_PLAYER_SCORES(state: MatchState, playerScores: PlayerScore[]) {
+      state.matchDetail.playerScores = playerScores;
     },
   },
 } as const;
